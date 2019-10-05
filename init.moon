@@ -20,6 +20,7 @@ sort_handler = (opts = {}) -> howl.app.editor.buffer\as_one_undo ->
   lines[i].text = strlines[i] for i=1, #lines
 
 input = howl.interact.read_text -- Make this more interactive.
+get_text = (result) -> result
 
 commands = {
   {
@@ -27,31 +28,34 @@ commands = {
     description: 'Sort lines matching a pattern (global or selection)'
     :input
     handler: (pattern) -> sort_handler :pattern
+    :get_text
   }
   {
-    name: 'sort-reverse'
+    name: 'sort!'
     description: 'Sort lines  matching a pattern in reverse order (global or selection)'
     :input
     handler: (pattern) -> sort_handler :pattern, reverse: true
+    :get_text
   }
   {
     name: 'sort-regex'
     description: 'Sort lines matching a regex (global or selection)'
     :input
     handler: (regex) -> sort_handler pattern: r(regex)
+    :get_text
   }
   {
-    name: 'sort-reverse-regex'
+    name: 'sort!-regex'
     description: 'Sort lines  matching a regex in reverse order (global or selection)'
     :input
     handler: (regex) -> sort_handler pattern: r(regex), reverse: true
+    :get_text
   }
 }
 
 howl.command.register cmd for cmd in *commands
 
-unload = ->
-  howl.command.unregister name for {:name} in *commands
+unload = -> howl.command.unregister name for {:name} in *commands
 
 {
   info:
